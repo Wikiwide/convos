@@ -12,13 +12,15 @@ import TextField from '../components/form/TextField.svelte';
 
 const api = getContext('api');
 
-let promise = false;
+let op;
 function onSubmit(e) {
-  promise = api.execute('loginUser', e.target).then((res) => {
+  op = api.createOperation('loginUser', e.target)
+  op.subscribe(() => {
     document.cookie = res.headers['Set-Cookie'];
     getUser(api);
     gotoUrl('/chat');
   });
+  api.execute(op);
 }
 </script>
 
